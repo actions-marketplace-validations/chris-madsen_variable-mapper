@@ -20,27 +20,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: chris-madsen/variable-mapper@v0.1.2
+    - uses: actions/checkout@v2
+    - uses: chris-madsen/variable-mapper@v0.1.3
       with:
-        key: "${{ github.base_ref }}"
+        key: "${GITHUB_REF#refs/heads/}"
         map: |
           {
+            "development": {
+              "environment": "development",
+              "AWS_ACCESS_KEY_ID": "${{ secrets.AWS_ACCESS_KEY_ID_DEV }}",
+              "AWS_SECRET_ACCESS_KEY": "${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}"
+            },
+            "qa": {
+              "environment": "qa",
+              "AWS_ACCESS_KEY_ID": "${{ secrets.AWS_ACCESS_KEY_ID_QA }}",
+              "AWS_SECRET_ACCESS_KEY": "${{ secrets.AWS_SECRET_ACCESS_KEY_QA }}"
+            },
             "master": {
               "environment": "production",
-              "AWS_ACCESS_KEY_ID": "${{ secrets.PROD_AWS_ACCESS_KEY_ID }}",
-              "AWS_SECRET_ACCESS_KEY": "${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
-            },
-            "staging": {
-              "environment": "staging",
-              "AWS_ACCESS_KEY_ID": "${{ secrets.STG_AWS_ACCESS_KEY_ID }}",
-              "AWS_SECRET_ACCESS_KEY": "${{ secrets.STG_AWS_ACCESS_KEY_ID }}"
-            },
-            ".*": {
-              "environment": "development",
-              "AWS_ACCESS_KEY_ID": "${{ secrets.DEV_AWS_ACCESS_KEY_ID }}",
-              "AWS_SECRET_ACCESS_KEY": "${{ secrets.DEV_AWS_ACCESS_KEY_ID }}"
+              "AWS_ACCESS_KEY_ID": "${{ secrets.AWS_ACCESS_KEY_ID_PROD }}",
+              "AWS_SECRET_ACCESS_KEY": "${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}"
             }
           }
+          
     - name: Echo environment
       run: echo ${{ env.environment }}
 ```
@@ -56,10 +58,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: chris-madsen/variable-mapper@v0.1.2
+    - uses: actions/checkout@v2
+    - uses: chris-madsen/variable-mapper@v0.1.3
       id: export
       with:
-        key: "${{ github.base_ref }}"
+        key: "${GITHUB_REF#refs/heads/}"
         map: |
           {
             "master": {
@@ -70,6 +73,7 @@ jobs:
             }
           }
         export_to: env,log,output
+        
     - name: Echo environment and output
       run: |
         echo ${{ env.environment }}
