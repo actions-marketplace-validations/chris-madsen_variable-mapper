@@ -20,10 +20,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Extract github branch name
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: get_branch
     - uses: actions/checkout@v2
     - uses: chris-madsen/variable-mapper@v0.1.3
       with:
-        key: "${GITHUB_REF#refs/heads/}"
+        key: ${{ steps.get_branch.outputs.branch }}
         map: |
           {
             "development": {
@@ -58,11 +61,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Extract github branch name
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: get_branch
     - uses: actions/checkout@v2
     - uses: chris-madsen/variable-mapper@v0.1.3
       id: export
       with:
-        key: "${GITHUB_REF#refs/heads/}"
+        key: ${{ steps.get_branch.outputs.branch }}
         map: |
           {
             "master": {
