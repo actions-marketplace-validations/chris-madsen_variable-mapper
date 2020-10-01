@@ -42,68 +42,33 @@ jobs:
         test "${{steps.run_action.outputs.env1B}}" = "value1B"
         test "${{steps.run_action.outputs.env2B}}" = "value2B"
         test "${{steps.run_action.outputs.env3B}}" = "value3B"
-  example: # Test README use case
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - uses: ./
-      id: run_action
-      with:
-        key: "${{ github.event_name }}"
-        map: |
-          {
-            "push|pull_request": {
-              "example": "${{secrets.EXAMPLE}}"
-            }
-          }
-        export_to: env
-    - name: 'Test Actions Parameters'
-      run: |
-        test "${{env.example}}" = "example"
+  
   test-readme-example1:
     runs-on: ubuntu-latest
     steps:
-    - uses: chris-madsen/variable-mapper@v0.1.2
+    # chris-madsen/variable-mapper@v0.1.2
+    - uses: ./
       with:
-        key: "${{github.base_ref}}"
+        key: "${{ github.base_ref }}"
         map: |
           {
             "master": {
-              "environment": "production",
-              "AWS_ACCESS_KEY_ID": "${{ secrets.PROD_AWS_ACCESS_KEY_ID }}",
-              "AWS_SECRET_ACCESS_KEY": "${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
+              "environment": "prod",
+              "AWS_ACCESS_KEY_ID": "AWS_ACCESS_KEY_ID_001",
+              "AWS_SECRET_ACCESS_KEY": "AWS_SECRET_ACCESS_KEY_002"
             },
-            "staging": {
-              "environment": "staging",
-              "AWS_ACCESS_KEY_ID": "${{ secrets.STG_AWS_ACCESS_KEY_ID }}",
-              "AWS_SECRET_ACCESS_KEY": "${{ secrets.STG_AWS_ACCESS_KEY_ID }}"
+            "qa": {
+              "environment": "qa",
+              "AWS_ACCESS_KEY_ID": "hash1",
+              "AWS_SECRET_ACCESS_KEY": "hash2"
             },
-            ".*": {
-              "environment": "development",
-              "AWS_ACCESS_KEY_ID": "${{ secrets.DEV_AWS_ACCESS_KEY_ID }}",
-              "AWS_SECRET_ACCESS_KEY": "${{ secrets.DEV_AWS_ACCESS_KEY_ID }}"
+            "development": {
+              "environment": "dev,
+              "AWS_ACCESS_KEY_ID": "hash3",
+              "AWS_SECRET_ACCESS_KEY": "hash4"
             }
           }
+        export_to: env
     - name: Echo environment
       run: echo ${{ env.environment }}
-  test-readme-example2:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: chris-madsen/variable-mapper@v0.1.2
-      id: export
-      with:
-        key: "${{github.base_ref}}"
-        map: |
-          {
-            "master": {
-              "environment": "production"
-            },
-            ".*": {
-              "environment": "development"
-            }
-          }
-        export_to: env,log,output
-    - name: Echo environment and output
-      run: |
-        echo ${{ env.environment }}
-        echo ${{ steps.export.outputs.environment }}
+      
