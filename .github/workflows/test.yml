@@ -69,7 +69,8 @@ jobs:
               "AWS_SECRET_ACCESS_KEY": "hash4"
             }
           }
-        export_to: env
     - name: Echo environment
-      run: echo ${{ env.environment }}
+      run: |
+        echo Branch: ${{ github.base_ref }}
+        echo Environment: ${{ env.environment }}
       
