@@ -67,7 +67,7 @@ jobs:
               "AWS_SECRET_ACCESS_KEY": "hash2"
             },
             "development": {
-              "environment": "dev,
+              "environment": "dev",
               "AWS_ACCESS_KEY_ID": "hash3",
               "AWS_SECRET_ACCESS_KEY": "hash4"
             }
