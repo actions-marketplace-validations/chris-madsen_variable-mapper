@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: kanga333/variable-mapper@v0.1.0
       with:
-        key: "${{github.base_ref}}"
+        key: "${{ github.base_ref }}"
         map: |
           {
             "master": {
@@ -59,7 +59,7 @@ jobs:
     - uses: kanga333/variable-mapper@v0.1.0
       id: export
       with:
-        key: "${{github.base_ref}}"
+        key: "${{ github.base_ref }}"
         map: |
           {
             "master": {
