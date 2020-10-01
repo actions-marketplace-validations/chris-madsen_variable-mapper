@@ -10,7 +10,7 @@ jobs:
     
     - name: Echo Branch
       run: |
-        echo Branch: ${{ github.base_ref }}
+        echo Branch: ${{ GITHUB_REF#refs/heads/ }}
     
     - uses: actions/checkout@v2
     - uses: ./
