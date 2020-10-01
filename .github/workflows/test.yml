@@ -1,16 +1,18 @@
 name: "build-test"
-on: # rebuild any PRs and main branch changes
-  pull_request:
-  push:
-    branches:
-      - master
-      - 'releases/*'
+on:
+  push
 
 jobs:
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v1
+    
+    - name: Echo Branch
+      run: |
+        echo Branch: ${{ github.base_ref }}
+    
+    - uses: actions/checkout@v2
     - uses: ./
       id: run_action
       with:
@@ -34,6 +36,7 @@ jobs:
             }
           }
         export_to: log,env,output
+  
     - name: 'Test Actions Parameters'
       run: |
         test "${{env.env1B}}" = "value1B"
@@ -69,6 +72,7 @@ jobs:
               "AWS_SECRET_ACCESS_KEY": "hash4"
             }
           }
+          
     - name: Echo environment
       run: |
         echo Branch: ${{ github.base_ref }}
