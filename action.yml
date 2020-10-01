@@ -1,4 +1,4 @@
-name: 'variable-map'
+name: 'Variable mapper'
 description: 'Github Action for mapping variables by a specific key'
 branding:
   color: green
