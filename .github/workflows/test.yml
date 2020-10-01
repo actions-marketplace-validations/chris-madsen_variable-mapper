@@ -47,6 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     # chris-madsen/variable-mapper@v0.1.2
+    - uses: actions/checkout@v2
     - uses: ./
       with:
         key: "${{ github.base_ref }}"
